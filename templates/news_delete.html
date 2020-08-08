@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Удаление {{ object.title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                Вы действительно хотите удалить новость <strong>{{ object.title }}</strong>?
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Да!</button>
+                </form>
+            </p>
+        </div>
+    </div>
+{% endblock %}

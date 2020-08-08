@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}
+    {{ news.title }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-12">
+            <h1>{{ news.title }}</h1>
+
+            <div style="font-weight: bold;">
+                Автор: {{ news.author.username }}, опубликовано: {{ news.created|naturalday }}
+            </div>
+            <article style="padding-top:10px;">
+                <p>
+                    {{ news.text|safe }}
+                </p>
+            </article>
+
+            <div class="row">
+                <div class="col-md-10">
+                    <a href="{% url 'news:edit_news' slug=news.slug %}">
+                        <button class="btn btn-warning">Редактировать</button>
+                    </a>
+                </div>
+
+                <div class="col-md-2 text-right">
+                    <a href="{% url 'news:delete_news' slug=news.slug %}">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form action="{% url 'news:add_comment' slug=news.slug %}" method="post">
+                {% csrf_token %}
+                {{ comments_form.as_p }}
+                <button type="submit" class="btn btn-success">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    {% if news.comments %}
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Комментарии ({{ news.comments.count }})</h3>
+                {% for comment in news.comments.all %}
+                    <div>
+                        <span>{{ comment.author.username }} <i>пишет</i>:</span>
+                        <blockquote>{{ comment.text }}</blockquote>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}

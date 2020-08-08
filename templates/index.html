@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+
+{% block title %}
+    Горячие новости с полей
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+
+            {% if messages %}
+
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            {% endif %}
+
+            {% for post in news %}
+                <div class="row" style="margin-bottom: 40px;">
+                    <div class="col-md-12">
+                        <a href="{% url 'news:detail_news' slug=post.slug %}">
+                            <h1>{{ post.title }}</h1>
+                            <small>{{ message }}</small>
+
+                            <ol>
+                                {% for user in users %}
+                                    <li>{{ user.username }}</li>
+                                {% endfor %}
+                            </ol>
+                        </a>
+                        <article>
+                            {{ post.text|safe }}
+                        </article>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% bootstrap_paginate page_obj range=7 %}
+        </div>
+    </div>
+{% endblock %}
