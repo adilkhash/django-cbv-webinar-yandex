@@ -1,0 +1,4 @@
+__pycache__/
+Dockerfile
+docker-compose.yaml
+host.conf

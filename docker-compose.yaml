@@ -1,0 +1,32 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+  staticfiles:
+
+services:
+  db:
+    image: postgres:13.1
+    environment:
+      - POSTGRES_PASSWORD=django_password
+      - POSTGRES_USER=django_user
+      - POSTGRES_DB=django_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    volumes:
+      - staticfiles:/code/static
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.19.6
+    volumes:
+      - staticfiles:/static
+      - ./host.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8888:80
+    depends_on:
+      - app
